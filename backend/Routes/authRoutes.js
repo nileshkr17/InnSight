@@ -23,7 +23,6 @@ router.post('/login', async (req, res) => {
 });
 
 router.post('/logout', async (req, res) => {
-  // No server-side action needed for JWT logout
   res.status(200).send("User logged out successfully");
 });
 
