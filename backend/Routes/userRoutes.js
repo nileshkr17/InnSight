@@ -5,7 +5,7 @@ const User = require('../models/userModel');
 const router = express.Router();
 
 
-router.post('/api/addUser', async (req, res) => {
+router.post('/addUser', async (req, res) => {
     try {
       const {
         username,
@@ -16,7 +16,12 @@ router.post('/api/addUser', async (req, res) => {
         location,
         governmentId,
         whatsappContact,
+        preferences
       } = req.body;
+      const existingUser = await User.findOne({username});
+      if(existingUser){
+        return res.status(400).json({message:"Username already exists"});
+      }
   
   const hashedPassword = await bcrypt.hash(password, 10);
   
@@ -32,20 +37,23 @@ router.post('/api/addUser', async (req, res) => {
           value: governmentId.value,
         },
         whatsappContact,
+        preferences:{
+          ...preferences
+        }
       });
   
       await user.save();
   
-      res.status(201).send("User added successfully");
+      res.status(201).send("User registered successfully");
     } catch (error) {
-      console.error("Error adding user:", error);
-      res.status(500).send("Internal Server Error");
+      console.error("Error registering user:", error);
+      res.status(500).send("Internal Server Error",error);
     }
   });
   
   
   
-router.get('/api/getAllUsers', async (req, res) => {
+router.get('/getAllUsers', async (req, res) => {
     // to list all the users data , which will help us to see all the users data in admin panel ok??
     try {
       const users = await User.find({});
@@ -65,11 +73,11 @@ router.get('/api/getAllUsers', async (req, res) => {
       required: true,
       unique: true,
     }
-  
+
     only unique value:
    */
   
-router.get('/api/user/:username', async (req, res) => {
+router.get('/user/:username', async (req, res) => {
     try {
       const username = req.params.username;
       const user = await User.findOne({ username });
@@ -83,7 +91,7 @@ router.get('/api/user/:username', async (req, res) => {
     }
   });
   
-  router.put('/api/user/:username', async (req, res) => {
+  router.put('/user/:username', async (req, res) => {
     try {
       const username = req.params.username;
       const updatedUser = req.body;
@@ -110,7 +118,7 @@ router.get('/api/user/:username', async (req, res) => {
     only unique value:
    */
   
-  router.delete('/api/user/:username', async (req, res) => {
+  router.delete('/user/:username', async (req, res) => {
     try {
       const username = req.params.username;
       const user = await User.findOneAndDelete({ username });

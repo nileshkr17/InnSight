@@ -10,3 +10,28 @@ InnSight is a hotel recommendation website that leverages machine learning to pr
 - **Responsive UI**: The frontend is built using React.js, ensuring a responsive and user-friendly interface across devices.
 - **Scalable Backend**: The backend is powered by Express.js and MongoDB, providing a scalable and efficient infrastructure for managing user data and hotel information.
 
+#### sample user ####
+```
+{
+  "username": "nilesh123",
+  "email": "nilesh@example.com",
+  "password": "password123",
+  "role": "user",
+  "gender": "Male",
+  "location": "Jamshedpur",
+  "governmentId": {
+    "type": "PAN",
+    "value": "ABCDE1234F"
+  },
+  "whatsappContact": 1234567890,
+  "emailVerified": true,
+  "paymentMethodAdded": true,
+  "preferences": {
+    "budget": "Medium",
+    "accessibility": "Enabled",
+    "notifications": "Email",
+    "language": "English"
+  }
+}
+
+```

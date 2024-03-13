@@ -52,11 +52,37 @@ const userModel = new Schema({
     type: Boolean,
     default: false,
   },
+  preferences: {
+    budget: {
+      type: String,
+      enum: ["Low", "Medium", "High"],
+      default: "Medium",
+    },
+    accessibility: {
+      type: String,
+      enum: ["Enabled", "Disabled"],
+      default: "Enabled",
+    },
+    notifications: {
+      type: String,
+      enum: ["Email", "SMS", "Push Notification"],
+      default: "Email",
+    },
+    language: {
+      type: String,
+      default: "English",
+    },
+  },
   createdAt: {
     type: Date,
     default: Date.now,
   },
+  isLoggedIn:{
+    type:Boolean,
+    default:false
+  }
 });
+
 
 const User_data = mongoose.model('User',userModel);
 
