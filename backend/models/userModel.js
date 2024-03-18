@@ -44,10 +44,6 @@ const userModel = new Schema({
     type: Number,
     required: true,
   },
-  emailVerified: {
-    type: Boolean,
-    default: false,
-  },
   paymentMethodAdded: {
     type: Boolean,
     default: false,
@@ -80,6 +76,14 @@ const userModel = new Schema({
   isLoggedIn:{
     type:Boolean,
     default:false
+  }, 
+  verificationCode: {
+    type: String,
+    default: Math.floor(100000 + Math.random() * 900000),
+  },
+  isVerified: {
+    type: Boolean,
+    default: false,
   }
 });
 
