@@ -6,7 +6,6 @@ const transporter = require('../email/mailer')
 
 const router = express.Router();
 
-
 router.post('/addUser', async (req, res) => {
     try {
       const {
@@ -24,9 +23,8 @@ router.post('/addUser', async (req, res) => {
       if(existingUser){
         return res.status(400).json({message:"Username already exists"});
       }
-  
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const verificationCode= generateOTP();
+const hashedPassword = await bcrypt.hash(password, 10);
+const verificationCode= generateOTP();
   
       const user = new User({
         username,
@@ -46,17 +44,25 @@ router.post('/addUser', async (req, res) => {
         verificationCode
       });
   
-      await user.save();
       await transporter.sendMail({
         to:email,
-        subject:"InnSight | Email Verification",
-        html:`<h1>Hi ${username},</h1>
-        <p>Thank you for registering with InnSight. Please verify your email by entering the following code:</p>
+        subject:"StayPlanner | Email Verification",
+        html:`
+        <h1>Hi ${username},</h1>
+        <p>Thank you for registering with StayPlanner. Please verify your email by entering the following code:</p>
         <h2>${verificationCode}</h2>
+        <p>Click <a href="http://localhost:6969/api/verifyEmail">here</a> to verify your email.</p>
+        <br>
+        <br>
+        <br>
+        <p>If you did not register with StayPlanner, please ignore this email.</p>
         <p>Thank you!</p>
-        <p>InnSight Team</p>`
+        <p>StayPlanner Team</p>`
 
       });
+      await user.save();
+
+
       res.status(201).send("User added successfully");
     } catch (error) {
       console.error("Error adding user:", error);
@@ -80,9 +86,10 @@ router.post('/verifyEmail', async (req, res) => {
     to:email,
     subject:"InnSight | Email Verified",
     html:`<h1>Hi ${user.username},</h1>
-    <p>Your email has been verified successfully. You can now login to your account.</p>
-    <p>Thank you!</p>
-    <p>InnSight Team</p>`
+    <p>Your email has been verified successfully.</p>
+    <p>Thank you for choosing StayPlanner!</p>
+    <p>StayPlanner Team</p>
+    `
   });
   res.status(200).send("Email verified successfully");
 })
@@ -108,7 +115,6 @@ router.get('/getAllUsers', async (req, res) => {
       required: true,
       unique: true,
     }
-
     only unique value:
    */
   
@@ -126,7 +132,7 @@ router.get('/user/:username', async (req, res) => {
     }
   });
   
-  router.put('/user/:username', async (req, res) => {
+router.put('/user/:username', async (req, res) => {
     try {
       const username = req.params.username;
       const updatedUser = req.body;
@@ -139,7 +145,7 @@ router.get('/user/:username', async (req, res) => {
       console.error("Error updating user:", error);
       res.status(500).send("Internal Server Error");
     }
-  });
+});
   
   
   /* username to delete user because 
@@ -149,11 +155,10 @@ router.get('/user/:username', async (req, res) => {
       required: true,
       unique: true,
     }
-  
     only unique value:
    */
   
-  router.delete('/user/:username', async (req, res) => {
+router.delete('/user/:username', async (req, res) => {
     try {
       const username = req.params.username;
       const user = await User.findOneAndDelete({ username });
@@ -165,6 +170,58 @@ router.get('/user/:username', async (req, res) => {
       console.error("Error deleting user:", error);
       res.status(500).send("Internal Server Error");
     }
-  });
+});
 
-  module.exports = router;
+
+router.post('/forgotPassword', async (req, res) => {
+  const {email}=req.body;
+  const user = await User.findOne({email});
+  if(!user){
+    return res.status(400).send("User not found");
+  }
+  const otp= generateOTP();
+  user.verificationCode=otp;
+  await user.save();
+  await transporter.sendMail({
+    to:email,
+    subject:"StayPlanner | Password Reset",
+    html:`
+    <h1>Hi ${user.username},</h1>
+    <p>Please reset your password by entering the following code:</p>
+    <h2>${otp}</h2>
+    <p>Click <a href="http://localhost:6969/api/resetPassword">here</a> to reset your password.</p>
+    <br>
+    <br>
+    <br>
+    <p>If you did not request a password reset, please ignore this email.</p>
+    <p>Thank you!</p>
+    <p>StayPlanner Team</p>`
+  });
+  res.status(200).send("Password reset code sent successfully");
+});
+
+router.post('/resetPassword', async (req, res) => {
+  const {email,verificationCode,password}=req.body;
+  const user = await User.findOne({
+    email,
+    verificationCode
+  });
+  if(!user){
+    return res.status(400).send("Invalid verification code");
+  }
+  user.password= await bcrypt.hash(password, 10);
+  await user.save();
+  transporter.sendMail({
+    to:email,
+    subject:"StayPlanner | Password Reset Successful",
+    html:`<h1>Hi ${user.username},</h1>
+    <p>Your password has been reset successfully.</p>
+    <p>Thank you for choosing StayPlanner!</p>
+    <p>StayPlanner Team</p>
+    `
+  });
+  res.status(200).send("Password reset successfully");
+});
+
+
+module.exports = router;
