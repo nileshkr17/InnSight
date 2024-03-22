@@ -9,18 +9,21 @@ dotenv.config();
 const router = express.Router();
 
 
+
 router.post('/login', async (req, res) => {
-  try {
+ const cookie = req.cookies;
     const { username, password } = req.body;
     const user = await User.findOne({ username });
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    if(user.isLoggedIn){
+    // check cookie also
+    if(user.isLoggedIn || cookie.token ){
       return res.status(401).json({ message: 'User is already logged in' });
+      
     }
-
+    try {
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
@@ -28,6 +31,7 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     user.isLoggedIn = true;
+    res.cookie('token', token, { httpOnly: true });
     await user.save();
   console.log(user);
 
@@ -52,6 +56,7 @@ router.post('/logout', async (req, res) => {
       return res.status(401).json({ message: 'User is not logged in' });
     }
     user.isLoggedIn = false;
+    res.clearCookie('token');
     await user.save();
   console.log(user);
 

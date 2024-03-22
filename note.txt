@@ -1,0 +1,30 @@
+ bookingHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Booking' }],
+    paymentDetails: { ... },
+    reviews: [{ hotel: { type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' }, rating: Number, review: String }]
+
+    hotelPreferences: {
+        location: String,
+        amenities: [String],
+        priceRange: {
+            min: Number,
+            max: Number
+        },
+        wifi: { type: Boolean, default: false },
+        doctor24x7: { type: Boolean, default: false },
+        petAllowed: { type: Boolean, default: false },
+        marriedCoupleFriendly: { type: Boolean, default: false },
+        unmarriedCoupleFriendly: { type: Boolean, default: false },
+        oldAgeFriendly: { type: Boolean, default: false },
+        journeyStartDate: { type: Date, required: true },
+        journeyEndDate: { type: Date, required: true },
+        preferredLocation: { type: String },
+        trasportPublic : {
+            airport: Number,
+
+        },
+        poolGymBar: {
+            type: Boolean, default:false;
+        },
+        bookmarkHotels: [{}]
+
+    }

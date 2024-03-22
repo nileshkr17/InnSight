@@ -4,6 +4,9 @@ require('dotenv').config();
 const app = express();
 const authRoutes = require('./Routes/authRoutes');
 const userRoutes = require('./Routes/userRoutes');
+const hotelRoutes = require('./Routes/hotelRoutes');
+const cookieParser = require('cookie-parser');
+
 const PORT = process.env.PORT || 6969;
 
 mongoose.connect(process.env.MONGODB_URI,
@@ -14,15 +17,15 @@ mongoose.connect(process.env.MONGODB_URI,
   console.log(`Kuch to problem hai while connection mongodb`,error)
 })
 
-
 app.use(express.json());
+app.use(cookieParser());
 
 app.get('/',(req,res)=>{
   res.send("Hello World");
 })
 
 app.use('/api', userRoutes);
-
+app.use('/hotel', hotelRoutes);
 app.use('/auth', authRoutes);
 
 app.listen(PORT,()=>{

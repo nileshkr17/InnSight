@@ -12,6 +12,8 @@ data = pd.read_csv('data.csv')
 @app.route('/', methods=['GET'])
 def home():
     return "<h1>Welcome Visitor!</h1>"
+# @app.route('/reco',method=['POST'])
+
 
 @app.route('/hotels', methods=['GET'])
 def get_hotels():
