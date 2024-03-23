@@ -1,6 +1,6 @@
 # StayPlanner
 
-InnSight is a hotel recommendation website that leverages machine learning to provide personalized hotel recommendations to users based on their preferences and requirements.
+StayPlanner is a hotel recommendation website that leverages machine learning to provide personalized hotel recommendations to users based on their preferences and requirements.
 
 ## Features
 
