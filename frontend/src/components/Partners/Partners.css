@@ -1,0 +1,17 @@
+.partners{
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 50px;
+    border: red 1 px solid;
+text-align: center;
+}
+.partner-logos{
+    display: flex;
+    justify-content: center;    
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 50px;
+    gap:40px;
+    border: red 1 px solid;
+}

@@ -1,0 +1,21 @@
+.hero-banner{
+    /* border:#ff0000 solid 1px; */
+    height: 30vh;
+    background-color: #074498;
+}
+
+.banner-text{
+    width: 50%;
+    margin: 0 auto;
+    padding-top: 10vh;
+    text-align: center;
+    color: #fff;
+}
+.hotel-cards{
+    justify-content: space-around;
+    margin: 0 auto;
+    gap: 20px;
+    border: red solid 1px;
+    width: 70%;
+    margin-top: 20px;
+}
