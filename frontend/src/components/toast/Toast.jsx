@@ -56,7 +56,7 @@ const Toast = ({ type, message, dismissError }) => {
         onClick={() => dismissError()}
         className="text-red-500 hover:text-red-700 ml-2"
         style={{
-          color: "rgba(239,68,68,1)",
+          color: "rgba(0,0,0,1)",
           marginLeft: "0.5rem",
           ":hover": { color: "#e53e3e" },
         }}

@@ -6,6 +6,7 @@ import AboutUs from "./AboutUs/AboutUs";
 import Login from "./Login/Login";
 import Register from "./Register/Register";
 import VerifyEmailPage from "./VerifyEmail/VerifyEmail";
+import UserProfile from "./UserProfile/UserProfile";
 
 const Allrouter = () => {
   return (
@@ -18,6 +19,7 @@ const Allrouter = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/verify-email" element={<VerifyEmailPage />} />
+          <Route path="/user/:username" element={<UserProfile />} />
         </Routes>
       </Router>
     </>
