@@ -4,8 +4,8 @@ const User = require("../models/userModel");
 const Hotel = require("../models/hotelModel");
 const generateOTP = require("../email/otp");
 const transporter = require("../email/mailer");
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const router = express.Router();
 
@@ -54,7 +54,7 @@ router.post("/addUser", async (req, res) => {
         <h1>Hi ${username},</h1>
         <p>Thank you for registering with StayPlanner. Please verify your email by entering the following code:</p>
         <h2>${verificationCode}</h2>
-        <p>Click <a href="http://localhost:6969/api/verifyEmail">here</a> to verify your email.</p>
+        <p>Click <a href="http://localhost:5173/verify-email?email=${email}&verificationCode=${verificationCode}">here</a> to verify your email.</p>
         <br>
         <br>
         <br>
@@ -219,11 +219,11 @@ router.post("/resetPassword", async (req, res) => {
   res.status(200).send("Password reset successfully");
 });
 
-router.post('/bookHotel', async (req, res) => {
+router.post("/bookHotel", async (req, res) => {
   try {
     const token = req.cookies.token;
     if (!token) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: "Unauthorized" });
     }
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decodedToken.userId;
@@ -231,9 +231,10 @@ router.post('/bookHotel', async (req, res) => {
     // Fetch the user from the database
     const currentUser = await User.findById(userId);
 
-    const { hotelId, checkIn, checkOut, numberOfRooms, numberOfPeople } = req.body;
+    const { hotelId, checkIn, checkOut, numberOfRooms, numberOfPeople } =
+      req.body;
     const hotel = await Hotel.findById(hotelId);
-    
+
     // Check if hotel exists
     if (!hotel) {
       return res.status(400).send("Hotel not available for booking");
@@ -249,7 +250,10 @@ router.post('/bookHotel', async (req, res) => {
 
     // Add booking details to hotel's userList
     // unique bookingid using uuid
-    const currentbookingId = Math.random().toString(36).substring(2, 10).toUpperCase();
+    const currentbookingId = Math.random()
+      .toString(36)
+      .substring(2, 10)
+      .toUpperCase();
     // not matching
 
     hotel.userList.push({
@@ -265,14 +269,14 @@ router.post('/bookHotel', async (req, res) => {
       numberOfRooms: numberOfRooms,
       numberOfPeople: numberOfPeople,
       totalAmount: hotel.pricePerNight * numberOfRooms,
-      paymentType: "Pending"
+      paymentType: "Pending",
     });
 
     // Save updated hotel details
     await hotel.save();
     // update userdb
     currentUser.bookingHistory.push({
-      bookingId:currentbookingId,
+      bookingId: currentbookingId,
       hotelId: hotel._id,
       hotelName: hotel.hotelName,
       checkIn: checkIn,
@@ -280,11 +284,11 @@ router.post('/bookHotel', async (req, res) => {
       numberOfRooms: numberOfRooms,
       numberOfPeople: numberOfPeople,
       totalAmount: hotel.pricePerNight * numberOfRooms,
-      paymentStatus: "Pending"
+      paymentStatus: "Pending",
     });
     await currentUser.save();
     // Send email to hotel admin
-    
+
     await transporter.sendMail({
       to: hotel.email, // Use hotel's email
       subject: "StayPlanner | Hotel Booked",
@@ -312,7 +316,7 @@ router.post('/bookHotel', async (req, res) => {
       <p>Thank you!</p>
       <p>Thank you for choosing StayPlanner!</p>
       <p>StayPlanner Team</p>
-      `
+      `,
     });
 
     // Send email to the user
@@ -343,7 +347,7 @@ router.post('/bookHotel', async (req, res) => {
       </table>
       <p>Thank you for choosing StayPlanner!</p>
       <p>StayPlanner Team</p>
-      `
+      `,
     });
 
     res.status(200).send("Hotel booked successfully");
@@ -353,8 +357,6 @@ router.post('/bookHotel', async (req, res) => {
   }
 });
 
-
 // send mail to the admin with the hotel details in table form with good design using nodemailer and user details that booked the hotel
-
 
 module.exports = router;

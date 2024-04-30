@@ -1,0 +1,23 @@
+.search-container {
+  --tw-bg-opacity: 1;
+  background-color: rgb(7 68 152 / var(--tw-bg-opacity));
+  padding-left: 0.5rem /* 8px */;
+  padding-right: 0.5rem /* 8px */;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .h-\[220px\] {
+    height: 220px;
+  }
+  @media (min-width: 1024px) {
+    .lg\:h-\[120px\] {
+      height: 120px;
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:h-\[120px\] {
+    height: 120px;
+  }
+}

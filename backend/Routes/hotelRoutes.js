@@ -1,119 +1,119 @@
-const express = require('express');
-const bcrypt = require('bcrypt');
-const Hotel = require('../models/hotelModel');
-const User = require('../models/userModel');
-const transporter = require('../email/mailer')
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
-
-
+const express = require("express");
+const bcrypt = require("bcrypt");
+const Hotel = require("../models/hotelModel");
+const User = require("../models/userModel");
+const transporter = require("../email/mailer");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const router = express.Router();
 
-router.post('/addHotel', async (req, res) => {
-    const token = req.cookies.token;
+router.post("/addHotel", async (req, res) => {
+  const token = req.cookies.token;
 
-    // If token does not exist, return unauthorized
-    if (!token) {
-        return res.status(401).json({ message: 'Unauthorized' });
+  // If token does not exist, return unauthorized
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  try {
+    // Verify the token to get the user ID
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decodedToken.userId;
+
+    // Fetch the user from the database
+    const adminUser = await User.findById(userId);
+
+    // If user does not exist or user is not admin, return forbidden
+    if (!adminUser || adminUser.role !== "admin") {
+      return res
+        .status(403)
+        .json({ message: "You are not authorized to add a hotel" });
     }
 
-    try {
-        // Verify the token to get the user ID
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-        const userId = decodedToken.userId;
+    const {
+      hotelAdminName,
+      hotelAdminId,
+      hotelBanner,
+      hotelImages,
+      hotelCapacity,
+      hotelDescription,
+      hotelName,
+      location,
+      address,
+      description,
+      amenities,
+      rating,
+      numberOfRooms,
+      pricePerNight,
+      images,
+      contactNumber,
+      email,
+      website,
+      coordinates,
+      reviews,
+      availability,
+      wifi,
+      doctor24x7,
+      petAllowed,
+      marriedCoupleFriendly,
+      unmarriedCoupleFriendly,
+      oldAgeFriendly,
+      journeyStartDate,
+      journeyEndDate,
+      preferredLocation,
+      transportPublic,
+      poolGymBar,
+      userList,
+    } = req.body;
 
-        // Fetch the user from the database
-        const adminUser = await User.findById(userId);
+    const existingHotel = await Hotel.findOne({ hotelName });
 
-        // If user does not exist or user is not admin, return forbidden
-        if (!adminUser || adminUser.role !== 'admin') {
-            return res.status(403).json({ message: 'You are not authorized to add a hotel' });
-        }
-      
-        const {
-            hotelAdminName,
-            hotelAdminId,
-            hotelBanner,
-            hotelImages,
-            hotelCapacity,
-            hotelDescription,
-            hotelName,
-            location,
-            address,
-            description,
-            amenities,
-            rating,
-            numberOfRooms,
-            pricePerNight,
-            images,
-            contactNumber,
-            email,
-            website,
-            coordinates,
-            reviews,
-            availability,
-            wifi,
-            doctor24x7,
-            petAllowed,
-            marriedCoupleFriendly,
-            unmarriedCoupleFriendly,
-            oldAgeFriendly,
-            journeyStartDate,
-            journeyEndDate,
-            preferredLocation,
-            transportPublic,
-            poolGymBar,
-            userList
-        } = req.body;
+    if (existingHotel) {
+      return res.status(400).json({ message: "Hotel already exists" });
+    }
 
-        const existingHotel = await Hotel.findOne({ hotelName });
+    const hotel = new Hotel({
+      hotelAdminName: adminUser.username,
+      hotelAdminId: adminUser.id,
+      hotelBanner,
+      hotelImages,
+      hotelCapacity,
+      hotelDescription,
+      hotelName,
+      location,
+      address,
+      description,
+      amenities,
+      rating,
+      numberOfRooms,
+      pricePerNight,
+      images,
+      contactNumber,
+      email,
+      website,
+      coordinates,
+      reviews,
+      availability,
+      wifi,
+      doctor24x7,
+      petAllowed,
+      marriedCoupleFriendly,
+      unmarriedCoupleFriendly,
+      oldAgeFriendly,
+      journeyStartDate,
+      journeyEndDate,
+      preferredLocation,
+      transportPublic,
+      poolGymBar,
+      userList,
+    });
 
-        if (existingHotel) {
-            return res.status(400).json({ message: "Hotel already exists" });
-        }
+    await hotel.save();
+    res.status(200).json({ message: "Hotel added successfully" });
 
-        const hotel = new Hotel({
-            hotelAdminName: adminUser.username,
-            hotelAdminId: adminUser.id,
-            hotelBanner,
-            hotelImages,
-            hotelCapacity,
-            hotelDescription,
-            hotelName,
-            location,
-            address,
-            description,
-            amenities,
-            rating,
-            numberOfRooms,
-            pricePerNight,
-            images,
-            contactNumber,
-            email,
-            website,
-            coordinates,
-            reviews,
-            availability,
-            wifi,
-            doctor24x7,
-            petAllowed,
-            marriedCoupleFriendly,
-            unmarriedCoupleFriendly,
-            oldAgeFriendly,
-            journeyStartDate,
-            journeyEndDate,
-            preferredLocation,
-            transportPublic,
-            poolGymBar,
-            userList
-        });
-
-        await hotel.save();
-        res.status(200).json({ message: "Hotel added successfully" });
-
-        // send mail to the admin with the hotel details
-        const emailContent = `<style>
+    // send mail to the admin with the hotel details
+    const emailContent = `<style>
             body {
                 font-family: Arial, sans-serif;
                 line-height: 1.6;
@@ -182,63 +182,197 @@ router.post('/addHotel', async (req, res) => {
         </div>
     </body>`;
 
-        // send email notification to the admin
-        transporter.sendMail({
-            to: adminUser.email,
-            subject: 'StayPlanner | Successfully added hotel',
-            html: emailContent
-        });
-    } catch (error) {
-        console.error("Error adding hotel:", error);
-        res.status(500).json({ message: "Internal Server Error" });
-    }
+    // send email notification to the admin
+    transporter.sendMail({
+      to: adminUser.email,
+      subject: "StayPlanner | Successfully added hotel",
+      html: emailContent,
+    });
+  } catch (error) {
+    console.error("Error adding hotel:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 });
 
+router.get("/hotels", async (req, res) => {
+  try {
+    const hotels = await Hotel.find({});
+    res.status(200).json(hotels);
+  } catch (error) {
+    console.error("Error finding hotels:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 
-router.get('/hotels', async (req, res) => {
-    try {
-      const hotels = await Hotel.find({});
-      res.status(200).json(hotels);
-    } catch (error) {
-      console.error("Error finding hotels:", error);
-      res.status(500).json({message:"Internal Server Error"});
+router.get("/hotel/:hotelId", async (req, res) => {
+  try {
+    const hotelId = req.params.hotelId;
+    const hotel = await Hotel.findOne({ hotelId });
+    if (!hotel) {
+      return res.status(404).json({ message: "Hotel not found" });
     }
+    res.status(200).json(hotel);
+  } catch (error) {
+    console.error("Error finding hotel:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+router.put("/hotel/:hotelId", async (req, res) => {
+  if (req.user.role !== "admin") {
+    return res
+      .status(403)
+      .json({ message: "You are not authorized to update a hotel" });
+  }
+  try {
+    const hotelId = req.params.hotelId;
+    const updatedHotel = req.body;
+    const hotel = await Hotel.findOneAndUpdate({ hotelId }, updatedHotel, {
+      new: true,
+    });
+    if (!hotel) {
+      return res.status(404).json({ message: "Hotel not found" });
+    }
+    res.status(200).json({ message: "Hotel updated successfully" });
+  } catch (error) {
+    console.error("Error updating hotel:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+router.get("/hotels/verticalFilters", (req, res) => {
+  res.status(200).json({
+    errors: [],
+    data: {
+      elements: [
+        {
+          filterId: "star_ratings",
+          title: "Star ratings",
+          filters: [
+            {
+              id: "5_star_rating",
+              title: "5 Star",
+              value: "5",
+            },
+            {
+              id: "4_star_rating",
+              title: "4 Star",
+              value: "4",
+            },
+            {
+              id: "3_star_rating",
+              title: "3 Star",
+              value: "3",
+            },
+          ],
+        },
+        {
+          filterId: "propety_type",
+          title: "Property type",
+          filters: [
+            {
+              id: "prop_type_hotel",
+              title: "Hotel",
+            },
+            {
+              id: "prop_type_apartment",
+              title: "Apartment",
+            },
+            {
+              id: "prop_type_villa",
+              title: "Villa",
+            },
+          ],
+        },
+      ],
+    },
+  });
+});
+
+router.get("/availableCities", (req, res) => {
+  res.status(200).json({
+    errors: [],
+    data: {
+      elements: ["pune", "bangalore", "mumbai"],
+    },
+  });
+});
+
+router.get("/hotels/filterHotels", (req, res) => {
+  const currentPage = req.query.currentPage;
+  const filters = req.query.filters;
+  const parsedFilters = JSON.parse(filters);
+  const parsedAdvancedFilters = JSON.parse(req.query.advancedFilters);
+  const city = parsedFilters.city;
+  const star_ratings = parsedFilters.star_ratings;
+  const priceFilter = parsedFilters.priceFilter;
+  const sortByFilter = parsedAdvancedFilters.find((filter) => {
+    return filter.sortBy;
   });
 
-router.get('/hotel/:hotelId', async (req, res) => {
-    try {
-      const hotelId = req.params.hotelId;
-      const hotel = await Hotel.findOne({ hotelId });
-        if (!hotel) {
-            return res.status(404).json({message:"Hotel not found"});
-        }   
-        res.status(200).json(hotel);
-    } catch (error) {
-        console.error("Error finding hotel:", error);
-        res.status(500).json({message:"Internal Server Error"});
-    }
-    }
-);
+  const filteredResults = hotelsData.filter((hotel) => {
+    const hotelRating = parseFloat(hotel.ratings);
+    const hotelPrice = parseFloat(hotel.price.replace(",", ""));
+    const isCityMatch = city === "" || hotel.city === city;
+    const isPriceMatch =
+      !priceFilter ||
+      (hotelPrice >= parseFloat(priceFilter.start) &&
+        hotelPrice <= parseFloat(priceFilter.end));
 
-router.put('/hotel/:hotelId', async (req, res) => {
-    if(req.user.role !== 'admin'){
-        return res.status(403).json({message:"You are not authorized to update a hotel"});
-    }
-    try {
-      const hotelId = req.params.hotelId;
-      const updatedHotel = req.body;
-      const hotel = await Hotel.findOneAndUpdate({ hotelId }, updatedHotel, { new: true });
-      if (!hotel) {
-        return res.status(404).json({message:"Hotel not found"});
+    if (isCityMatch && isPriceMatch) {
+      if (star_ratings && star_ratings.length > 0) {
+        return star_ratings.some((selectedRating) => {
+          const selected = parseFloat(selectedRating);
+          const range = 0.5;
+          return Math.abs(hotelRating - selected) <= range;
+        });
+      } else {
+        // If no star ratings are provided, return all hotels for the city (or all cities if city is empty)
+        return true;
       }
-      res.status(200).json({message:"Hotel updated successfully"});
-    } catch (error) {
-      console.error("Error updating hotel:", error);
-      res.status(500).json({message:"Internal Server Error"});
     }
-}
-);
+    return false;
+  });
 
+  if (sortByFilter) {
+    const sortType = sortByFilter.sortBy;
+    if (sortType === "priceLowToHigh") {
+      filteredResults.sort((a, b) => {
+        return a.price - b.price;
+      });
+    }
+    if (sortType === "priceHighToLow") {
+      filteredResults.sort((a, b) => {
+        return b.price - a.price;
+      });
+    }
+  }
+
+  // Pagination config
+  const pageSize = 6;
+  const totalPages = Math.floor((filteredResults.length - 1) / pageSize) + 1;
+  const currentPageNum = currentPage > totalPages ? totalPages : currentPage;
+  const startIdx = (currentPageNum - 1) * pageSize;
+  const endIdx = currentPageNum * pageSize;
+  const paginatedResults = filteredResults.slice(startIdx, endIdx);
+
+  const paging = {
+    currentPage: currentPageNum || 1,
+    totalPages,
+    pageSize,
+  };
+
+  res.status(200).json({
+    errors: [],
+    data: {
+      elements: paginatedResults,
+    },
+    metadata: {
+      totalResults: filteredResults.length,
+    },
+    paging,
+  });
+});
 
 // book hotel check if hotel have capacity
 // router.post('/bookHotel/:hotelId', async (req, res) => {
@@ -261,6 +395,5 @@ router.put('/hotel/:hotelId', async (req, res) => {
 //     }
 //     }
 // );
-
 
 module.exports = router;
