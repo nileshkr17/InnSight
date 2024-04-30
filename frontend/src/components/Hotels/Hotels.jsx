@@ -124,24 +124,6 @@ const HotelsSearch = () => {
     setDateRange([ranges.selection]);
   };
 
-  // const onSearchButtonAction = () => {
-  //   const activeFilters = getActiveFilters();
-  //   const numGuest = Number(numGuestsInputValue);
-  //   const checkInDate = formatDate(dateRange.startDate) ?? "";
-  //   const checkOutDate = formatDate(dateRange.endDate) ?? "";
-  //   setSearchParams({
-  //     city: locationInputValue,
-  //     numGuests: numGuestsInputValue,
-  //   });
-  //   fetchHotels({
-  //     city: locationInputValue,
-  //     ...activeFilters,
-  //     guests: numGuest,
-  //     checkInDate,
-  //     checkOutDate,
-  //   });
-  // };
-
   const onSearchButtonAction = () => {
     const activeFilters = getActiveFilters();
     const numGuest = Number(numGuestsInputValue);
@@ -245,80 +227,7 @@ const HotelsSearch = () => {
    * @returns {Promise<void>}
    * @async
    */
-  // const fetchHotels = async (filters) => {
-  //   setHotelsResults({
-  //     isLoading: true,
-  //     data: [],
-  //     errors: [],
-  //   });
-  //   const hotelsResultsResponse = await axios.get(
-  //     "http://127.0.0.1:6969/hotel/hotels/filterHotels",
-  //     {
-  //       filters: JSON.stringify(filters),
-  //       currentPage: currentResultsPage,
-  //       advancedFilters: JSON.stringify([
-  //         {
-  //           sortBy: sortByFilterValue.value,
-  //         },
-  //       ]),
-  //     }
-  //   );
-  //   if (hotelsResultsResponse) {
-  //     setHotelsResults({
-  //       isLoading: false,
-  //       data: hotelsResultsResponse.data.elements,
-  //       errors: hotelsResultsResponse.errors,
-  //       metadata: hotelsResultsResponse.metadata,
-  //       pagination: hotelsResultsResponse.paging,
-  //     });
-  //   }
-  // };
-
-  // const fetchHotels = async (
-  //   filters,
-  //   currentResultsPage,
-  //   sortByFilterValue
-  // ) => {
-  //   try {
-  //     // Set loading state before making the request
-  //     setHotelsResults({
-  //       isLoading: true,
-  //       data: [],
-  //       errors: [],
-  //     });
-
-  //     // Make the GET request to fetch hotels
-  //     const hotelsResultsResponse = await axios.get(
-  //       "http://127.0.0.1:6969/hotel/hotels/filterHotels",
-  //       {
-  //         params: {
-  //           filters: JSON.stringify(filters),
-  //           currentPage: currentResultsPage,
-  //           advancedFilters: JSON.stringify([
-  //             { sortBy: sortByFilterValue.value },
-  //           ]),
-  //         },
-  //       }
-  //     );
-
-  //     if (hotelsResultsResponse && hotelsResultsResponse.status === 200) {
-  //       // If the response is successful (status code 200), update the hotels results state
-  //       setHotelsResults({
-  //         isLoading: false,
-  //         data: hotelsResultsResponse.data.elements,
-  //         errors: hotelsResultsResponse.data.errors,
-  //         metadata: hotelsResultsResponse.data.metadata,
-  //         pagination: hotelsResultsResponse.data.paging,
-  //       });
-  //     } else {
-  //       // If the response status is not 200, handle the error
-  //       console.error("Error: Unable to fetch hotels data");
-  //     }
-  //   } catch (error) {
-  //     // If an error occurs during the request, handle it
-  //     console.error(`Error: ${error.message}`);
-  //   }
-  // };
+  
 
   useEffect(() => {
     async function fetchHotels() {
@@ -368,129 +277,6 @@ const HotelsSearch = () => {
 
     fetchHotels();
   }, []);
-
-  // const getVerticalFiltersData = async () => {
-  //   const filtersDataResponse = await axios.get(
-  //     "http://127.0.0.1:6969/hotel/hotels/verticalFilters"
-  //   );
-  //   if (filtersDataResponse) {
-  //     setFiltersData({
-  //       isLoading: false,
-  //       data: filtersDataResponse.data.elements,
-  //       errors: filtersDataResponse.errors,
-  //     });
-  //   }
-  // };
-  // const getVerticalFiltersData = async () => {
-  //   try {
-  //     const filtersDataResponse = await axios.get(
-  //       "http://127.0.0.1:6969/hotel/hotels/verticalFilters"
-  //     );
-  //     if (filtersDataResponse && filtersDataResponse.status === 200) {
-  //       // If the response is successful (status code 200), set the filters data
-  //       setFiltersData({
-  //         isLoading: false,
-  //         data: filtersDataResponse.data.data.elements, // Access 'elements' property of the response data
-  //         errors: [],
-  //       });
-  //     } else {
-  //       // If the response status is not 200, handle the error
-  //       setFiltersData({
-  //         isLoading: false,
-  //         data: [],
-  //         errors: ["Error: Unable to fetch vertical filters data"],
-  //       });
-  //     }
-  //   } catch (error) {
-  //     // If an error occurs during the request, handle it
-  //     setFiltersData({
-  //       isLoading: false,
-  //       data: [],
-  //       errors: [`Error: ${error.message}`],
-  //     });
-  //   }
-  // };
-  // const getVerticalFiltersData = async () => {
-  //   // console.log("in func");
-  //   // try {
-  //   //   const filtersDataResponse = await axios.get(
-  //   //     "http://127.0.0.1:6969/hotel/hotels/verticalFilters"
-  //   //   );
-  //   //   if (filtersDataResponse && filtersDataResponse.status === 200) {
-  //   //     setFiltersData({
-  //   //       isLoading: false,
-  //   //       data: filtersDataResponse.data.elements,
-  //   //       errors: [],
-  //   //     });
-  //   //   } else {
-  //   //     setFiltersData({
-  //   //       isLoading: false,
-  //   //       data: [],
-  //   //       errors: ["Error: Unable to fetch vertical filters data"],
-  //   //     });
-  //   //   }
-  //   // } catch (error) {
-  //   //   setFiltersData({
-  //   //     isLoading: false,
-  //   //     data: [],
-  //   //     errors: [`Error: ${error.message}`],
-  //   //   });
-  //   // }
-  //   setFiltersData({
-  //     isLoading: false,
-  //     data: [
-  //       {
-  //         filterId: "star_ratings",
-  //         title: "Star ratings",
-  //         filters: [
-  //           {
-  //             id: "5_star_rating",
-  //             title: "5 Star",
-  //             value: "5",
-  //           },
-  //           {
-  //             id: "4_star_rating",
-  //             title: "4 Star",
-  //             value: "4",
-  //           },
-  //           {
-  //             id: "3_star_rating",
-  //             title: "3 Star",
-  //             value: "3",
-  //           },
-  //         ],
-  //       },
-  //       {
-  //         filterId: "propety_type",
-  //         title: "Property type",
-  //         filters: [
-  //           {
-  //             id: "prop_type_hotel",
-  //             title: "Hotel",
-  //           },
-  //           {
-  //             id: "prop_type_apartment",
-  //             title: "Apartment",
-  //           },
-  //           {
-  //             id: "prop_type_villa",
-  //             title: "Villa",
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //     errors: [],
-  //   });
-  //   setSelectedFiltersState(
-  //     filtersData.data.map((filterGroup) => ({
-  //       ...filterGroup,
-  //       filters: filterGroup.filters.map((filter) => ({
-  //         ...filter,
-  //         isSelected: false,
-  //       })),
-  //     }))
-  //   );
-  // };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -709,17 +495,6 @@ const HotelsSearch = () => {
         sortingFilterOptions={sortingFilterOptions}
       />
 
-      {/* {hotelsResults.pagination?.totalPages > 1 && (
-        <div className="my-4">
-          <PaginationController
-            currentPage={currentResultsPage}
-            totalPages={hotelsResults.pagination?.totalPages}
-            handlePageChange={handlePageChange}
-            handlePreviousPageChange={handlePreviousPageChange}
-            handleNextPageChange={handleNextPageChange}
-          />
-        </div>
-      )} */}
     </div>
   );
 };
