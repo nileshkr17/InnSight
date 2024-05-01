@@ -7,7 +7,6 @@ import Login from "./Login/Login";
 import Register from "./Register/Register";
 import VerifyEmailPage from "./VerifyEmail/VerifyEmail";
 import UserProfile from "./UserProfile/UserProfile";
-import Logout from "./Logout/Logout";
 import HotelDetails from "./HotelDetails/HotelDetails";
 import AllHotels from "./Hotels/AllHotels";
 
