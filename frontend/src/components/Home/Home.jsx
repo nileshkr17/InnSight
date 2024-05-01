@@ -61,7 +61,11 @@ const Home = () => {
       </div>
       <Partners />
       {/* hotel cards */}
+      {/* recommended hotels */}
+      {/* center */}
       <div className="hotel-cards">
+        {/* center the hotel */}
+        <h2>Recommended Hotels</h2>
         {/* Pass hotels data to HotelList */}
         <HotelList hotels={hotels} />
       </div>

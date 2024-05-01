@@ -1,0 +1,166 @@
+/* HotelDetails.css */
+
+.parent-parent {
+    min-height: 80vh;
+}
+*{
+    list-style:none;
+}
+
+.parent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    width: 80%;
+    margin-top: 40px;
+}
+
+
+.hoteldetails {
+    width: 70%;
+    margin: 0 auto;
+}
+
+.right {
+    flex-direction: column;
+    justify-content: center;
+    width: 50%;
+}
+
+.left {
+    width: 40%;
+    height: 100%;
+    /* border: 1px solid red; */
+    margin-left: 20px;
+    padding: 20px;
+}
+
+.hoteldetails {
+    padding: 20px; /* Add padding for better spacing */
+}
+
+.hotel-name {
+    font-size: 34px;
+    margin-bottom: 10px;
+}
+
+p {
+    margin-bottom: 5px;
+}
+
+.right >img {
+    width: 100%;
+    height: auto; /* Maintain aspect ratio */
+}
+
+.hotel-location {
+    margin-top: 20px;
+    font-size: 24px;
+}
+
+.hotel-location p {
+    margin-bottom: 5px;
+}
+
+.facilities-header {
+    margin-top: 20px;
+}
+.freecancel{
+    color: #12e046;
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.price-details {
+    margin-top: 20px;
+}
+.price{
+    font-size: 18px;
+    margin-top: 10px;
+}
+.detailhead{
+    font-size: 24px;
+    color: #fff;
+    margin-top: 10px;
+    background-color: #0062cc;
+    text-align: center;
+    padding: 20px;
+
+}
+input[type="date"] {
+    
+    padding: 10px 30px;
+    margin-right: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+.backbtn{
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: hand;    
+}
+.backbtn > button:hover{
+    background-color: #232426;
+
+}
+
+
+.room-count{
+    margin-top: 10px;
+    /* green; */
+    color: #0062cc;
+    font-weight: bold;
+}
+.booknow {
+    /* background-color:  Blue button background */
+    color: #fff; /* White button text */
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color:  #ca8a04;/* Blue button background */
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+
+
+
+/* SiteStayReview.css */
+
+.site-stay-review {
+    font-family: Arial, sans-serif;
+    max-width: 500px;
+    background-color: #f9f9f9;
+    word-wrap: break-word;
+    /* border:red 1px solid; */
+
+    margin: 0 auto;
+    padding: 20px;
+    /* border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+}
+
+.site-stay-review h2 {
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+/*  */
+
+.site-stay-review .category {
+    font-weight: bold;
+}
+
+.site-stay-review .rating {
+    color: #007bff;
+    font-weight: bold;
+}

@@ -1,6 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const Hotel = require("../models/hotelModel");
+const HotelCheck = require("../models/hotelCheckModel");
 const User = require("../models/userModel");
 const transporter = require("../email/mailer");
 const jwt = require("jsonwebtoken");
@@ -196,7 +197,7 @@ router.post("/addHotel", async (req, res) => {
 
 router.get("/hotels", async (req, res) => {
   try {
-    const hotels = await Hotel.find({});
+    const hotels = await HotelCheck.find({});
     res.status(200).json(hotels);
   } catch (error) {
     console.error("Error finding hotels:", error);
@@ -204,10 +205,10 @@ router.get("/hotels", async (req, res) => {
   }
 });
 
-router.get("/hotel/:hotelId", async (req, res) => {
+router.get("/:uniqId", async (req, res) => {
   try {
-    const hotelId = req.params.hotelId;
-    const hotel = await Hotel.findOne({ hotelId });
+    const uniqId = req.params.uniqId;
+    const hotel = await HotelCheck.findOne({ uniq_id: uniqId });
     if (!hotel) {
       return res.status(404).json({ message: "Hotel not found" });
     }
@@ -217,6 +218,7 @@ router.get("/hotel/:hotelId", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 
 router.put("/hotel/:hotelId", async (req, res) => {
   if (req.user.role !== "admin") {

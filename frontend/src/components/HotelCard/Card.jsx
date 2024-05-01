@@ -1,12 +1,10 @@
-/* eslint-disable no-unused-vars */
 import React from "react";
+import { Link } from "react-router-dom"; // Import Link from React Router
 import "./Card.css";
-// import axios from "axios";
 import PropTypes from "prop-types";
 
 const Card = ({ hotel }) => {
   const {
-
     uniq_id,
     rate_perNight,
     hotel_star_rating,
@@ -14,12 +12,9 @@ const Card = ({ hotel }) => {
     hotel_facilities,
     img_url,
     city,
-    amenities,
     latitude,
-    pricePerNight,
     longitude
   } = hotel;
-  
 
   function limitWords(text, limit) {
     const words = text.split(' ');
@@ -28,33 +23,34 @@ const Card = ({ hotel }) => {
     }
     return text;
   }
+
   return (
     <div className="card">
       <div className="cursor-pointer">
-        <a href={`/hotel/${uniq_id}`} className="block hotel-link">
-          <img src={img_url} alt={property_name} className="hotel-image" />
-        </a>
+        {/* Wrap the card in a Link component and pass hotel details as route parameters */}
+        <Link
+  to={{
+    pathname: `/hotel/${uniq_id}`,
+    state: { hotel } // Pass the hotel object as state
+  }}
+  className="block hotel-link"
+>
+  <img src={img_url} alt={property_name} className="hotel-image" />
+</Link>
       </div>
       <div className="hotel-details">
         <div>
-          <a href={`/hotel/${uniq_id}`} className="block hotel-link">
+         <Link
+            to={{
+              pathname: `hotel/hotel/${uniq_id}`
+            }}
+            >
             <h4 className="hotel-name">{property_name}</h4>
-          </a>
+          </Link>
           <p className="hotel-location">{city}</p>
           <p className="hotel-facilities" id="limited-facilities">{limitWords(hotel_facilities, 15)}</p>
-          <a href={`https://maps.google.com/?q=${latitude},${longitude}`} target="_blank">
-    <img src="https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png" alt="locate icon" width="20" height="20" />
-    Locate Us
-  </a>
+          
         </div>
-        <ul className="amenities-list">
-          {/* {amenities &&
-            amenities.map((amenity, index) => ( */}
-              <li  className="amenity">
-                {/* {amenity} */}
-                one              </li>
-            {/* ))} */}
-        </ul>
       </div>
       <div className="booking-info">
         <div className="rating">
@@ -78,9 +74,9 @@ Card.propTypes = {
     hotel_facilities: PropTypes.arrayOf(PropTypes.string),
     hotel_star_rating: PropTypes.number.isRequired,
     rate_perNight: PropTypes.number.isRequired,
+    latitude: PropTypes.number.isRequired,
+    longitude: PropTypes.number.isRequired
   }).isRequired,
 };
-
-
 
 export default Card;

@@ -41,7 +41,7 @@ function HotelList({ hotels }) {
   return (
     <div className="hotel-list">
       {hotels.map((hotel) => (
-        <Card  hotel={hotel} />
+        <Card key={hotel.uniq_id} hotel={hotel} />        
       ))}
     </div>
   );
