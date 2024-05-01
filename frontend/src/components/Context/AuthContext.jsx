@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-// import { networkAdapter } from 'services/NetworkAdapter';
+// import { networkAdapter } from "services/NetworkAdapter";
 import axios from "axios";
 
 export const AuthContext = createContext();
@@ -9,7 +9,6 @@ export const AuthContext = createContext();
  * @namespace AuthProvider
  * @component
  */
-// eslint-disable-next-line react/prop-types
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
@@ -17,10 +16,14 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const checkAuthStatus = async () => {
-      const response = await axios.get("http://127.0.0.1:6969/auth/login");
+      const response = await axios.get("http://127.0.0.1:6969/auth/auth-user");
+      console.log("auth check");
+      console.log(response.data);
       if (response && response.data) {
-        setIsAuthenticated(response.data.isAuthenticated);
-        setUserDetails(response.data.userDetails);
+        console.log("checking", response.data.data.isAuthenticated);
+
+        setIsAuthenticated(response.data.data.isAuthenticated);
+        setUserDetails(response.data.data.userDetails);
       }
     };
 

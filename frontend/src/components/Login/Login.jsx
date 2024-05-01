@@ -11,6 +11,7 @@ import "./Login.css";
 // import { AuthContext } from "../Context/AuthContext";
 // import validations from "../utils/validations";
 import Toast from "../toast/Toast";
+import { AuthContext } from "../Context/AuthContext";
 
 /**
  * Login Component
@@ -20,6 +21,9 @@ import Toast from "../toast/Toast";
  * Displays an error message for invalid login attempts.
  */
 const Login = () => {
+  // const { login } = useContext(AuthContext);
+  const context = useContext(AuthContext);
+
   // const cookiesData = document.cookie;
 
   const navigate = useNavigate();
@@ -50,14 +54,24 @@ const Login = () => {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
 
+    // const res = await axios.get("http://127.0.0.1:6969/auth/test");
+    // console.log(res.data.token);
+
     // if (validations.validate("email", loginData.email)) {
     const response = await axios.post(
       "http://127.0.0.1:6969/auth/login",
       loginData
     );
     if (response && response.data.token) {
-      // context.triggerAuthCheck();
-      navigate(`/user/${loginData.username}`);
+      // const user = await axios.get(
+      //   `http://127.0.0.1:6969/api/user/${loginData.username}`
+      // );
+      // // console.log(user);
+
+      // // context.triggerAuthCheck();
+      // login(user.data);
+      context.triggerAuthCheck();
+      navigate(`/`);
     } else if (response && response.errors.length > 0) {
       setErrorMessage(response.errors[0]);
     }

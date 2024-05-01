@@ -84,75 +84,82 @@ const userModel = new Schema({
     type: Boolean,
     default: false,
   },
-  bookingHistory: [{ 
-      checkIn: Date, 
-      checkOut: Date, 
-      numberOfRooms: Number, 
-      numberOfPeople: Number, 
-      totalAmount: Number, 
-      paymentStatus: String, 
-      paymentType: String, 
-      paymentId: String
-   }],
+  bookingHistory: [
+    {
+      bookingDate: Date,
+      checkIn: Date,
+      checkOut: Date,
+      totalFare: Number,
+      numberOfRooms: Number,
+      numberOfPeople: Number,
+      totalAmount: Number,
+      hotelName: String,
+      paymentStatus: String,
+      paymentType: String,
+      paymentId: String,
+    },
+  ],
 
-  reviews: [{ 
-      hotel: { type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' }, 
-      rating: Number, review: String
-     }],
+  reviews: [
+    {
+      hotel: { type: mongoose.Schema.Types.ObjectId, ref: "Hotel" },
+      rating: Number,
+      review: String,
+    },
+  ],
   hotelPreferences: {
-        location: String,
-        amenities: [String],
-        priceRange: {
-            min: Number,
-            max: Number,
-        },
-        wifi: {
-           type: Boolean,
-            default: false 
-          },
-        doctor24x7: { 
-          type: Boolean, 
-          default: false 
-        },
-        petAllowed: { 
-          type: Boolean,
-           default: false 
-          },
-        marriedCoupleFriendly: { 
-          type: Boolean,
-           default: false
-           },
-        unmarriedCoupleFriendly: {
-           type: Boolean,
-            default: false 
-          },
-        oldAgeFriendly: {
-           type: Boolean,
-            default: false 
-          },
-        journeyStartDate: { 
-          type: Date,
-           required: false
-           },
-        journeyEndDate: { 
-          type: Date, 
-          required: false
-        },
-        preferredLocation: { 
-          type: String 
-        },
-        trasportPublic : {
-            airport: Number,
-            busStand: Number,
-            railwayStation: Number,
-        },
-        poolGymBar: {
-            type: Boolean, 
-            default:false
-        },
-        bookmarkHotels: [{}]
-
-    }
+    location: String,
+    amenities: [String],
+    priceRange: {
+      min: Number,
+      max: Number,
+    },
+    wifi: {
+      type: Boolean,
+      default: false,
+    },
+    doctor24x7: {
+      type: Boolean,
+      default: false,
+    },
+    petAllowed: {
+      type: Boolean,
+      default: false,
+    },
+    marriedCoupleFriendly: {
+      type: Boolean,
+      default: false,
+    },
+    unmarriedCoupleFriendly: {
+      type: Boolean,
+      default: false,
+    },
+    oldAgeFriendly: {
+      type: Boolean,
+      default: false,
+    },
+    journeyStartDate: {
+      type: Date,
+      required: false,
+    },
+    journeyEndDate: {
+      type: Date,
+      required: false,
+    },
+    preferredLocation: {
+      type: String,
+    },
+    trasportPublic: {
+      airport: Number,
+      busStand: Number,
+      railwayStation: Number,
+    },
+    poolGymBar: {
+      type: Boolean,
+      default: false,
+    },
+    bookmarkHotels: [{}],
+  },
 });
 
 const User_data = mongoose.model("User", userModel);

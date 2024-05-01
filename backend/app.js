@@ -6,11 +6,11 @@ const userRoutes = require("./Routes/userRoutes");
 const hotelRoutes = require("./Routes/hotelRoutes");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+// const { cookies } = require("next/headers");
 const app = express();
 app.use(cors());
 
 const PORT = process.env.PORT || 6969;
-
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
@@ -22,6 +22,7 @@ mongoose
   });
 
 app.use(express.json());
+// app.use(cookies());
 app.use(cookieParser());
 
 app.get("/", (req, res) => {

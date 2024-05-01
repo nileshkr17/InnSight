@@ -7,6 +7,7 @@ import Login from "./Login/Login";
 import Register from "./Register/Register";
 import VerifyEmailPage from "./VerifyEmail/VerifyEmail";
 import UserProfile from "./UserProfile/UserProfile";
+import Logout from "./Logout/Logout";
 
 const Allrouter = () => {
   return (
@@ -14,9 +15,11 @@ const Allrouter = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/hotels" element={<Hotels />} />
+          {/* <Route path="/hotels" element={<Hotels />} /> */}
           <Route path="/about" element={<AboutUs />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
+
           <Route path="/register" element={<Register />} />
           <Route path="/verify-email" element={<VerifyEmailPage />} />
           <Route path="/user/:username" element={<UserProfile />} />
