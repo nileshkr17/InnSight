@@ -22,6 +22,7 @@ data = pd.read_csv("data.csv", on_bad_lines='skip')
 
 columns_to_drop = ['additional_info', 'crawl_date', 'guest_recommendation', 'hotel_brand', 'pageurl', 'query_time_stamp', 'review_count_by_category', 'room_area', 'similar_hotel', 'site_review_rating', 'site_review_count', 'site_stay_review_rating', 'sitename']
 data.drop(columns=columns_to_drop, axis=1, inplace=True)
+# data.dropna(axis=0, how='any', inplace=True)
 # Identify missing values
 missing_values = data['hotel_facilities'].isnull()
 
@@ -35,7 +36,9 @@ data.loc[data['hotel_facilities'] == 'N/A', 'hotel_facilities'] = np.nan
 # Drop rows with incorrect values
 data = data.dropna(subset=['hotel_facilities'])
 
+
 def recommend_hotel(city, facilities, rating_threshold=0.5):
+    # Rename duplicate columns
     facilities = facilities.lower().split('|')
     stop_words = set(stopwords.words('english'))
     lemmatizer = WordNetLemmatizer()
@@ -70,9 +73,8 @@ def recommend_hotel(city, facilities, rating_threshold=0.5):
     max_similarity = country['overall_similarity'].max()
     country['accuracy_match'] = country['overall_similarity'] / max_similarity
     
-    return country[["hotel_category", "hotel_facilities", "hotel_star_rating", "property_name", "accuracy_match"]].head(10)
-   # return country.head(10)
-
+    return country[["city","rate_perNight","uniq_id","hotel_star_rating","hotel_category","hotel_description","img_url","hotel_facilities", "hotel_star_rating","latitude","longitude", "property_name", "accuracy_match"]].head(100)
+   
 
 @app.route('/', methods=['GET'])
 def home():
@@ -80,7 +82,7 @@ def home():
 
 @app.route('/hotels', methods=['GET'])
 def get_hotels():
-    top_100_hotels = data.head(50)
+    top_100_hotels = data.head(100)
 
     hotels_json = top_100_hotels.to_json(orient='records')
 
@@ -91,6 +93,7 @@ def get_hotels():
 @app.route('/hotels/input', methods=['POST'])
 def get_user_input():
     input_data = request.json
+    print("Recevied input data:",input_data)
     if not input_data or 'city' not in input_data or 'facilities' not in input_data:
         return jsonify({'message': 'Please provide input data with the "city" and "facilities" fields in JSON format'}), 400
     

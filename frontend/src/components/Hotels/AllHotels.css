@@ -1,0 +1,102 @@
+.parent-search {
+    margin: 0 auto;
+    width: 80%;
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 28px;
+}
+.hotel-list{
+    width: 70%;
+    margin: 0 auto;
+    padding: 20px;
+
+}
+.search-bar-hotel > input[type="text"]{
+    width: 50%;
+    padding: 10px;
+    border-bottom: 1px solid #373636;
+    margin-top: 20px;
+}
+.filter{
+    width: 30%;
+    margin-top: 20px;
+}
+select{
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    border-bottom: 1px solid #373636;
+}
+option{
+    padding: 10px;
+}
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+  }
+  
+  .spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #7983ff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pagination button {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    color: #333;
+    cursor: pointer;
+    padding: 5px 10px;
+    margin: 0 5px;
+    border-radius: 5px;
+  }
+  
+  .pagination button.active {
+    background-color: #7983ff;
+    color: #fff;
+  }
+  
+  .pagination button:hover {
+    background-color: #f0f0f0;
+  }
+  
+
+
+  .loader {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite;
+    margin: 50px auto;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
