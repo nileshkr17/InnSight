@@ -241,12 +241,12 @@ router.post("/bookHotel", async (req, res) => {
     }
 
     // Check hotel capacity
-    if (hotel.numberOfRooms < numberOfRooms) {
-      return res.status(400).send("Hotel capacity exceeded");
-    }
+    // if (hotel.numberOfRooms < numberOfRooms) {
+    //   return res.status(400).send("Hotel capacity exceeded");
+    // }
 
     // Update hotel's available rooms
-    hotel.numberOfRooms -= numberOfRooms;
+    // hotel.numberOfRooms -= numberOfRooms;
 
     // Add booking details to hotel's userList
     // unique bookingid using uuid
@@ -289,35 +289,35 @@ router.post("/bookHotel", async (req, res) => {
     await currentUser.save();
     // Send email to hotel admin
 
-    await transporter.sendMail({
-      to: hotel.email, // Use hotel's email
-      subject: "StayPlanner | Hotel Booked",
-      html: `
-      <h1>Hi ${hotel.hotelAdminName},</h1>
-      <p>The following user has booked a hotel:</p>
-      <table style="border: 1px solid #000;">
-        <tr>
-          <th>User</th>
-          <th>Check-in</th>
-          <th>Check-out</th>
-          <th>Number of rooms</th>
-          <th>Number of people</th>
-          <th>Total amount</th>
-        </tr>
-        <tr>
-          <td>${currentUser.username}</td>
-          <td>${checkIn}</td>
-          <td>${checkOut}</td>
-          <td>${numberOfRooms}</td>
-          <td>${numberOfPeople}</td>
-          <td>${hotel.pricePerNight * numberOfRooms}</td>
-        </tr>
-      </table>
-      <p>Thank you!</p>
-      <p>Thank you for choosing StayPlanner!</p>
-      <p>StayPlanner Team</p>
-      `,
-    });
+    // await transporter.sendMail({
+    //   to: hotel.email, // Use hotel's email
+    //   subject: "StayPlanner | Hotel Booked",
+    //   html: `
+    //   <h1>Hi ${hotel.hotelAdminName},</h1>
+    //   <p>The following user has booked a hotel:</p>
+    //   <table style="border: 1px solid #000;">
+    //     <tr>
+    //       <th>User</th>
+    //       <th>Check-in</th>
+    //       <th>Check-out</th>
+    //       <th>Number of rooms</th>
+    //       <th>Number of people</th>
+    //       <th>Total amount</th>
+    //     </tr>
+    //     <tr>
+    //       <td>${currentUser.username}</td>
+    //       <td>${checkIn}</td>
+    //       <td>${checkOut}</td>
+    //       <td>${numberOfRooms}</td>
+    //       <td>${numberOfPeople}</td>
+    //       <td>${hotel.pricePerNight * numberOfRooms}</td>
+    //     </tr>
+    //   </table>
+    //   <p>Thank you!</p>
+    //   <p>Thank you for choosing StayPlanner!</p>
+    //   <p>StayPlanner Team</p>
+    //   `,
+    // });
 
     // Send email to the user
     await transporter.sendMail({

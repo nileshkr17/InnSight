@@ -1,0 +1,27 @@
+/* PaymentForm.css */
+
+.payment-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    
+    border: 1px solid #ccc;
+    border-radius: 5px;
+
+  }
+
+  
+  
+  .card-element {
+    margin-bottom: 20px;
+  }
+  
+  .error-message {
+    color: red;
+    margin-top: 10px;
+  }
+  
+  .paybody{
+    min-height: 70vh;
+    padding: 30px;
+  }

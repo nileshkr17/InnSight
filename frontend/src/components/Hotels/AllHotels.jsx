@@ -43,7 +43,7 @@ for (let i = startPage; i <= endPage; i++) {
 }
 
   return (
-    <>
+    <div className="hotelbody">
     {loading ? (
         <div className="loader"></div> // Loading animation
       ) : (
@@ -122,7 +122,7 @@ for (let i = startPage; i <= endPage; i++) {
     </div>
     </>
     )}
-    </>
+    </div>
   );
 };
 

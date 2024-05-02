@@ -7,6 +7,10 @@
     border-radius: 10px;
     font-size: 28px;
 }
+
+.hotelbody{
+  min-height: 70vh;
+}
 .hotel-list{
     width: 70%;
     margin: 0 auto;

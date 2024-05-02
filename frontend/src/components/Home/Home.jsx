@@ -4,34 +4,55 @@ import "./Home.css";
 import GlobalSearch from "../SearchBar/GlobalSearch";
 import Partners from "../Partners/Partners";
 import HotelList from "../HotelCard/HotelList";
+import { useContext } from "react";
+import { AuthContext } from "../Context/AuthContext";
 
 const Home = () => {
+  const { isAuthenticated, userDetails } = useContext(AuthContext);
+
   const [searchCriteria, setSearchCriteria] = useState({
     city: "",
-    purpose: ""
+    purpose: "",
   });
   const [hotels, setHotels] = useState([]);
+  const [recommendedHotels, setRecommendedHotels] = useState([]);
 
-  const handleInputChange = (event) => {
+  const handleInputChange = event => {
     const { name, value } = event.target;
-    setSearchCriteria((prevSearchCriteria) => ({
+    setSearchCriteria(prevSearchCriteria => ({
       ...prevSearchCriteria,
-      [name]: value
+      [name]: value,
     }));
+
+    console.log("Search Criteria are:", searchCriteria);
   };
 
   const handleSearch = async () => {
     try {
+      console.log("User Details:", userDetails);
+      console.log("Search Criteria:", searchCriteria);
       const response = await axios.post("http://localhost:5000/hotels/input", {
         city: searchCriteria.city,
-        facilities: searchCriteria.purpose
+        facilities: searchCriteria.purpose,
       });
       console.log("Response:", response.data);
-      setHotels(response.data.hotels); // Assuming 'hotels' is the key in the response data
+      setRecommendedHotels(response.data.hotels);
     } catch (error) {
       console.error("Error fetching hotels:", error);
     }
   };
+
+  if (!isAuthenticated) {
+    const fetchHotels = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/hotels");
+        setHotels(response.data.hotels);
+      } catch (error) {
+        console.error("Error fetching hotels:", error);
+      }
+    };
+    fetchHotels();
+  }
 
   return (
     <>
@@ -43,9 +64,11 @@ const Home = () => {
           <div className="search-bar">
             <input
               type="text"
-              placeholder="City Name"
+              placeholder={isAuthenticated ? userDetails.location : "City"}
               name="city"
-              value={searchCriteria.city}
+              value={
+                 searchCriteria.city
+              }
               onChange={handleInputChange}
             />
             <input
@@ -55,19 +78,32 @@ const Home = () => {
               value={searchCriteria.purpose}
               onChange={handleInputChange}
             />
+
             <button onClick={handleSearch}>Search</button>
           </div>
         </div>
       </div>
       <Partners />
       {/* hotel cards */}
-      {/* recommended hotels */}
-      {/* center */}
       <div className="hotel-cards">
-        {/* center the hotel */}
-        <h2>Recommended Hotels</h2>
-        {/* Pass hotels data to HotelList */}
-        <HotelList hotels={hotels} />
+        {isAuthenticated ? (
+          { recommendedHotels } ? (
+            <>
+              <h2>Recommended Hotels</h2>
+              <HotelList hotels={recommendedHotels} />
+            </>
+          ) : (
+            <>
+              <h2>Hotel List</h2>
+              <HotelList hotels={hotels} />
+            </>
+          )
+        ) : (
+          <>
+            <h2>Hotel List</h2>
+            <HotelList hotels={hotels} />
+          </>
+        )}
       </div>
     </>
   );
