@@ -221,24 +221,36 @@ router.post("/resetPassword", async (req, res) => {
 
 router.post("/bookHotel", async (req, res) => {
   try {
-    const token = req.cookies.token;
-    if (!token) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decodedToken.userId;
+    // const token = req.cookies.token;
+    // if (!token) {
+    //   return res.status(401).json({ message: "Unauthorized" });
+    // }
+    // const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const {
+      userDetails,
+      hotels,
+      // userId,
+      // hotelId,
+      // checkIn,
+      // checkOut,
+      // numberOfRooms,
+      // numberOfPeople,
+    } = req.body;
+    // const userId = decodedToken.userId;
+    console.log("after call");
+    console.log(userDetails);
 
     // Fetch the user from the database
-    const currentUser = await User.findById(userId);
+    console.log(hotels);
+    // const currentUser = await User.findById(userDetails.userId);
 
-    const { hotelId, checkIn, checkOut, numberOfRooms, numberOfPeople } =
-      req.body;
-    const hotel = await Hotel.findById(hotelId);
+    // const hotel = await Hotel.findById(hotels.hotelId);
 
     // Check if hotel exists
-    if (!hotel) {
-      return res.status(400).send("Hotel not available for booking");
-    }
+    console.log("find");
+    // if (!hotel) {
+    //   return res.status(400).send("Hotel not available for booking");
+    // }
 
     // Check hotel capacity
     // if (hotel.numberOfRooms < numberOfRooms) {
@@ -250,43 +262,45 @@ router.post("/bookHotel", async (req, res) => {
 
     // Add booking details to hotel's userList
     // unique bookingid using uuid
+
     const currentbookingId = Math.random()
       .toString(36)
       .substring(2, 10)
       .toUpperCase();
     // not matching
 
-    hotel.userList.push({
-      bookingId: currentbookingId,
-      userId: currentUser._id,
-      username: currentUser.username,
-      email: currentUser.email,
-      governmentId: currentUser.governmentId,
-      whatsappContact: currentUser.whatsappContact,
-      preferences: currentUser.preferences,
-      checkIn: checkIn,
-      checkOut: checkOut,
-      numberOfRooms: numberOfRooms,
-      numberOfPeople: numberOfPeople,
-      totalAmount: hotel.pricePerNight * numberOfRooms,
-      paymentType: "Pending",
-    });
+    // hotel.userList.push({
+    //   bookingId: currentbookingId,
+    //   userId: currentUser._id,
+    //   username: currentUser.username,
+    //   email: currentUser.email,
+    //   governmentId: currentUser.governmentId,
+    //   whatsappContact: currentUser.whatsappContact,
+    //   preferences: currentUser.preferences,
+    //   checkIn: checkIn,
+    //   checkOut: checkOut,
+    //   numberOfRooms: numberOfRooms,
+    //   numberOfPeople: numberOfPeople,
+    //   totalAmount: hotel.pricePerNight * numberOfRooms,
+    //   paymentType: "Pending",
+    // });
 
     // Save updated hotel details
-    await hotel.save();
+    console.log("before save");
+    // await hotel.save();
     // update userdb
-    currentUser.bookingHistory.push({
-      bookingId: currentbookingId,
-      hotelId: hotel._id,
-      hotelName: hotel.hotelName,
-      checkIn: checkIn,
-      checkOut: checkOut,
-      numberOfRooms: numberOfRooms,
-      numberOfPeople: numberOfPeople,
-      totalAmount: hotel.pricePerNight * numberOfRooms,
-      paymentStatus: "Pending",
-    });
-    await currentUser.save();
+    // currentUser.bookingHistory.push({
+    //   bookingId: currentbookingId,
+    //   hotelId: hotel._id,
+    //   hotelName: hotel.hotelName,
+    //   checkIn: checkIn,
+    //   checkOut: checkOut,
+    //   numberOfRooms: numberOfRooms,
+    //   numberOfPeople: numberOfPeople,
+    //   totalAmount: hotel.pricePerNight * numberOfRooms,
+    //   paymentStatus: "Pending",
+    // });
+    // await currentUser.save();
     // Send email to hotel admin
 
     // await transporter.sendMail({
@@ -320,13 +334,20 @@ router.post("/bookHotel", async (req, res) => {
     // });
 
     // Send email to the user
+    console.log("before mail");
     await transporter.sendMail({
-      to: currentUser.email,
+      to: userDetails.email,
       subject: "StayPlanner | Hotel Booked",
       html: `
-      <h1>Hi ${currentUser.username},</h1>
+      <h1>Hi ${userDetails.username},</h1>
       <p>Please bring the government ID for verification</p>
       <p>You have successfully booked a hotel:</p>
+      <p>Your Booking Id is:</p>
+      <table border>
+        <tr>
+          <td>${currentbookingId}</td>
+        </tr>
+      <table>
       <table border>
         <tr>
           <th>Hotel</th>
@@ -337,18 +358,19 @@ router.post("/bookHotel", async (req, res) => {
           <th>Total amount</th>
         </tr>
         <tr>
-          <td>${hotel.hotelName}</td>
-          <td>${checkIn}</td>
-          <td>${checkOut}</td>
-          <td>${numberOfRooms}</td>
-          <td>${numberOfPeople}</td>
-          <td>${hotel.pricePerNight * numberOfRooms}</td>
+          <td>${hotels.hotelName}</td>
+          <td>${hotels.checkIn}</td>
+          <td>${hotels.checkOut}</td>
+          <td>7</td>
+          <td>8</td>
+          <td>${hotels.pricePerNight * 7}</td>
         </tr>
       </table>
       <p>Thank you for choosing StayPlanner!</p>
       <p>StayPlanner Team</p>
       `,
     });
+    console.log("mail sent");
 
     res.status(200).send("Hotel booked successfully");
   } catch (error) {

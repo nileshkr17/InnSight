@@ -13,13 +13,13 @@ const Card = ({ hotel }) => {
     img_url,
     city,
     latitude,
-    longitude
+    longitude,
   } = hotel;
 
   function limitWords(text, limit) {
-    const words = text.split(' ');
+    const words = text.split(" ");
     if (words.length > limit) {
-      return words.slice(0, limit).join(' ') + '...';
+      return words.slice(0, limit).join(" ") + "...";
     }
     return text;
   }
@@ -29,27 +29,28 @@ const Card = ({ hotel }) => {
       <div className="cursor-pointer">
         {/* Wrap the card in a Link component and pass hotel details as route parameters */}
         <Link
-  to={{
-    pathname: `/hotel/${uniq_id}`,
-    state: { hotel } // Pass the hotel object as state
-  }}
-  className="block hotel-link"
->
-  <img src={img_url} alt={property_name} className="hotel-image" />
-</Link>
+          to={{
+            pathname: `/hotel/${uniq_id}`,
+            state: { hotel }, // Pass the hotel object as state
+          }}
+          className="block hotel-link"
+        >
+          <img src={img_url} alt={property_name} className="hotel-image" />
+        </Link>
       </div>
       <div className="hotel-details">
         <div>
-         <Link
+          <Link
             to={{
-              pathname: `hotel/hotel/${uniq_id}`
+              pathname: `hotel/${uniq_id}`,
             }}
-            >
+          >
             <h4 className="hotel-name">{property_name}</h4>
           </Link>
           <p className="hotel-location">{city}</p>
-          <p className="hotel-facilities" id="limited-facilities">{limitWords(hotel_facilities, 15)}</p>
-          
+          <p className="hotel-facilities" id="limited-facilities">
+            {limitWords(hotel_facilities, 15)}
+          </p>
         </div>
       </div>
       <div className="booking-info">
@@ -75,7 +76,7 @@ Card.propTypes = {
     hotel_star_rating: PropTypes.number.isRequired,
     rate_perNight: PropTypes.number.isRequired,
     latitude: PropTypes.number.isRequired,
-    longitude: PropTypes.number.isRequired
+    longitude: PropTypes.number.isRequired,
   }).isRequired,
 };
 

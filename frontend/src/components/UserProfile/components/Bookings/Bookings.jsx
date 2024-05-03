@@ -98,7 +98,7 @@ const Bookings = ({ bookings }) => {
                     style={{ display: "flex", alignItems: "center" }}
                   >
                     <span className="font-medium">Total Fare: </span>{" "}
-                    <span className="ml-2">{booking.totalFare}</span>
+                    <span className="ml-2">{booking.totalAmount}</span>
                   </p>
                 </div>
               </div>

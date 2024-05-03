@@ -23,7 +23,7 @@ const Allrouter = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/verify-email" element={<VerifyEmailPage />} />
           <Route path="/hotel/:id" element={<HotelDetails />} />
-          <Route path="/process-payment" element={<PaymentForm/>}/>
+          <Route path="/process-payment" element={<PaymentForm />} />
           <Route path="/user/:username" element={<UserProfile />} />
         </Routes>
       </Router>

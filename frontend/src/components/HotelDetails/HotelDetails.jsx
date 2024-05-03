@@ -37,8 +37,7 @@ const HotelDetails = () => {
     // Calculate the number of nights between check-in and check-out
     const checkInDate = new Date(checkIn);
     const checkOutDate = new Date(checkOut);
-    const numberOfNights =
-      (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24);
+    const numberOfNights = (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24);
     // Calculate total price including tax
     const totalPrice = hotel.rate_perNight * numberOfNights;
     // Assuming tax is 10% of the total price
@@ -48,7 +47,14 @@ const HotelDetails = () => {
 
   const handleBookings = () => {
     // Navigate to /process-payment with the total price as a query parameter
-    navigate(`/process-payment?price=${checkIn && checkOut ? calculateTotalPrice() : 0}`);
+    // navigate(`/process-payment?price=${checkIn && checkOut ? calculateTotalPrice() : 0}`);
+    const totalPrice = checkIn && checkOut ? calculateTotalPrice() : 0;
+    // Navigate to /process-payment with the total price and hotel data as query parameters
+    navigate(
+      `/process-payment?price=${totalPrice}&hotelData=${encodeURIComponent(
+        JSON.stringify(hotel)
+      )}`
+    );
   };
 
   if (!hotel) {
@@ -99,7 +105,7 @@ const HotelDetails = () => {
             onClick={handleBookings}
             disabled={!isAuthenticated}
           >
-          {isAuthenticated ? "Book Now" : "Log In to Book"}
+            {isAuthenticated ? "Book Now" : "Log In to Book"}
           </button>
         </div>
       </div>
@@ -120,7 +126,6 @@ const HotelDetails = () => {
         </div>
       </div>
       {/* Conditionally render PaymentForm component only when hotel data is available */}
-      
     </div>
   );
 };
